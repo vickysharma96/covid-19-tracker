@@ -1,0 +1,14 @@
+.dropdownMenu{
+    max-height: 350px;
+    overflow-y: scroll;
+}
+
+.dropdownButton{
+    margin-bottom: 1rem;
+}
+
+.searchCountryInput{
+    border-radius: 10px;
+    border-width: 0.2rem;
+    width: 100%;
+}
