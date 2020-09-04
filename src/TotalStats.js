@@ -13,7 +13,7 @@ function TotalStats({totalCases, recoveredCases, activeCases, deaths}){
             <Card.Text className='cardText'>
                 {Number(totalCases).toLocaleString('en-IN')}
             </Card.Text>
-            </Card.Body>
+            </Card.Body> 
         </Card>
         <Card bg='info'>
             <Card.Body>
