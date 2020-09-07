@@ -3,7 +3,7 @@ import TotalStats from './TotalStats';
 import CountryFilter from './CountryFilter';
 import MainData from './MainData'
 import './App.css';
-import { Container, Row, Col, Image } from 'react-bootstrap';
+import { Container, Row, Col, Image, Spinner } from 'react-bootstrap';
 import logo from './images/virus.png'
 
 function App() {
@@ -12,26 +12,32 @@ function App() {
   const [countryData, setCountryData] = useState([]);
   const [selectedName, setSelectedName] = useState("Worldwide");
   const [stateNull, setStateNull] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   
   useEffect(() => {
+    setLoading(true)
     fetch("https://corona.azure-api.net/summary")
     .then((response) => response.json())
     .then((data) => {
       setGlobalData(data.globalData);
+      setLoading(false)
     });
   },[]);
 
   useEffect(()=>{
+    setLoading(true)
     fetch(`https://corona.azure-api.net/summary`)
     .then((response) => response.json())
     .then((data) => {
         let newData = sortData(data.countries);
         setCountryData(newData);
         setCountries(newData)
+        setLoading(false)
     });
   },[]);
   const onCountryChange = async (e) => {
+    setLoading(true)
     const countryCode = e.target.innerHTML.replace(/[()]/g,'');
     setSelectedName(e.target.innerHTML)
     if (!(countryCode.localeCompare("Worldwide"))){
@@ -41,10 +47,10 @@ function App() {
         setGlobalData(data.globalData);
         let newData = sortData(data.countries);
         setCountryData(newData);
+        setLoading(false)
       })
     }
     else{
-      console.log(`Inside ${countryCode}`)
       fetch(`https://corona.azure-api.net/country/${countryCode}`)
       .then((response) => response.json())
       .then((data) => {
@@ -52,6 +58,7 @@ function App() {
       let newData = sortData(data.State);
       data.State.length === 0 ?  setStateNull(true) :  setStateNull(false)
       setCountryData(newData);
+      setLoading(false)
     })
   }
 }
@@ -73,10 +80,10 @@ function App() {
       <Container>
       <header className="App-header">
         <Row>
-          <Col sm={10}>
+          <Col lg={10} sm={9}>
             <h1>Covid-19 Tracker</h1>
           </Col>
-          <Col lg={2} md={3} sm={2}>
+          <Col lg={2} md={3} sm={1}>
             <Image src={logo} alt="" width="170px"/>
           </Col>
         </Row>
@@ -93,15 +100,16 @@ function App() {
         <hr />
         <h1 style={{textAlign:'left'}}>{`${selectedName}`}</h1>
         <br />
-        <TotalStats 
+         {loading ? <Spinner animation='border' style={{position:'relative',top:'50%',left:'50%'}}/> : <TotalStats 
           totalCases={globalData.Confirmed} 
           activeCases={globalData.Active} 
           recoveredCases={globalData.Recovered} 
           deaths={globalData.Deaths}
-        />
+          loader={loading}
+        />}
       </div>
       <div className = 'mainData'>
-        <MainData data={countryData} selection={selectedName} stateEmpty={stateNull}/>
+        {loading ? <Spinner animation='border' style={{position:'relative',top:'50%',left:'50%'}}/> : <MainData data={countryData} selection={selectedName} stateEmpty={stateNull} loader={loading}/>}
       </div>
       </Container>
     </div>
