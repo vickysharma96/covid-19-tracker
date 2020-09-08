@@ -25,15 +25,18 @@ function MainData({ data , selection, stateEmpty}) {
                     </td>
                     <td>
                         {stateEmpty === false ? country.Confirmed.toLocaleString('en-IN') : "No data available"}
+                        {<h6><b>(+{country.NewConfirmed})</b></h6>}
                     </td>
                     <td>
                         {stateEmpty === false ? country.Active.toLocaleString('en-IN') : "No data available"}
                     </td>
                     <td>
                         {stateEmpty === false ? country.Recovered.toLocaleString('en-IN') + "   (" + (parseInt((country.Recovered/country.Confirmed)*100)) + "%)": "No data available"}
+                        {<h6><b>(+{country.NewRecovered})</b></h6>}
                     </td>
                     <td>
                         {stateEmpty === false ? country.Deaths.toLocaleString('en-IN') + "   (" + (parseInt((country.Deaths/country.Confirmed)*100)) + "%)" : "No data available"}
+                        {<h6><b>(+{country.NewDeaths})</b></h6>}
                     </td>
                 </tr>
             ))}

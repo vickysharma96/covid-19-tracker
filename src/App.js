@@ -88,6 +88,7 @@ function App() {
           </Col>
         </Row>
       <h6><small>Provides Covid-19 details on a Country-State level</small></h6>
+      <h6><b>Last updated : {String(globalData.Last_Update).slice(0,10)}</b></h6>
       </header>
       <hr />
       <div>
