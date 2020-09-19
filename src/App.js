@@ -13,6 +13,7 @@ function App() {
   const [selectedName, setSelectedName] = useState("Worldwide");
   const [stateNull, setStateNull] = useState(false)
   const [loading, setLoading] = useState(false);
+  const [countryTimeline, setCountryTimeline] = useState([]);
 
   
   useEffect(() => {
@@ -30,9 +31,8 @@ function App() {
     fetch(`https://corona.azure-api.net/summary`)
     .then((response) => response.json())
     .then((data) => {
-        let newData = sortData(data.countries);
-        setCountryData(newData);
-        setCountries(newData)
+        setCountryData(sortData(data.countries));
+        setCountries(data.countries)
         setLoading(false)
     });
   },[]);
@@ -60,8 +60,17 @@ function App() {
       setCountryData(newData);
       setLoading(false)
     })
+    fetch(`https://api-corona.azurewebsites.net/timeline/${countryCode}`)
+    .then((response) => response.json())
+    .then((data) => {
+      setCountryTimeline(data)
+    })
   }
 }
+
+  // useEffect(() => {
+  //   fetch(`https://api-corona.azurewebsites.net/timeline/afghanistan`)
+  // })
 
   const sortData = (casesData) => {
     let sortedData = [...casesData]
@@ -112,6 +121,7 @@ function App() {
       <div className = 'mainData'>
         {loading ? <Spinner animation='border' style={{position:'relative',top:'50%',left:'50%'}}/> : <MainData data={countryData} selection={selectedName} stateEmpty={stateNull} loader={loading}/>}
       </div>
+      <br /><br />
       </Container>
     </div>
   );
