@@ -14,7 +14,7 @@ function TotalStats({totalCases, recoveredCases, activeCases, deaths}){
                 <Card.Body>
                 <Card.Title className='cardTitle'>Total Confirmed</Card.Title>
                 <Card.Text className='cardText'>
-                    {Number(totalCases).toLocaleString('en-IN')}
+                    {Number(totalCases).toLocaleString('en-US')}
                 </Card.Text>
                 </Card.Body> 
                 </Card>
@@ -23,7 +23,7 @@ function TotalStats({totalCases, recoveredCases, activeCases, deaths}){
                 <Card.Body>
                 <Card.Title className='cardTitle'>Active Cases</Card.Title>
                 <Card.Text className='cardText'>
-                    {Number(activeCases).toLocaleString('en-IN') + "   (" + (parseInt((Number(activeCases)/Number(totalCases))*100)) + "%)"}
+                    {Number(activeCases).toLocaleString('en-US') + "   (" + (parseInt((Number(activeCases)/Number(totalCases))*100)) + "%)"}
                 </Card.Text>
                 </Card.Body>
                 </Card>
@@ -38,7 +38,7 @@ function TotalStats({totalCases, recoveredCases, activeCases, deaths}){
                 <Card.Body>
                 <Card.Title className='cardTitle'>Recovered Cases</Card.Title>
                 <Card.Text className='cardText'>
-                    {Number(recoveredCases).toLocaleString('en-IN') + "   (" + (parseInt((Number(recoveredCases)/Number(totalCases))*100)) + "%)"}
+                    {Number(recoveredCases).toLocaleString('en-US') + "   (" + (parseInt((Number(recoveredCases)/Number(totalCases))*100)) + "%)"}
                 </Card.Text>
                 </Card.Body>
                 </Card>
@@ -47,7 +47,7 @@ function TotalStats({totalCases, recoveredCases, activeCases, deaths}){
                 <Card.Body>
                 <Card.Title className='cardTitle'>Deaths</Card.Title>
                 <Card.Text className='cardText'>
-                    {Number(deaths).toLocaleString('en-IN') + "   (" + (parseInt((Number(deaths)/Number(totalCases))*100)) + "%)"}
+                    {Number(deaths).toLocaleString('en-US') + "   (" + (parseInt((Number(deaths)/Number(totalCases))*100)) + "%)"}
                 </Card.Text>
                 </Card.Body>
                 </Card>

@@ -1,8 +1,17 @@
 .App-header{
-  margin-top: 2rem;
+  padding-top: 2rem;
   margin-bottom: 1.5rem;
 }
 
 .mainData{
   margin-top: 4rem;
+}
+
+.dark-mode{
+  background-color: black;
+  color: white
+}
+
+.light-mode{
+  background-color: white;
 }

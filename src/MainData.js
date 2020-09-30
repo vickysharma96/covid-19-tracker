@@ -2,18 +2,18 @@ import React from 'react';
 import { Table, Card } from 'react-bootstrap';
 import './MainData.css'
 
-function MainData({ data = [], selection, stateEmpty }) {
+function MainData({ data = [], selection, stateEmpty, darkMode }) {
 
     const display = (selection === 'Worldwide' ? 'Country' : 'State')
-    console.log(`${selection} : ${stateEmpty} DATA ${data.length}`)
+    // console.log(`${selection} : ${stateEmpty} DATA ${data.length}`)
     return data.length ? 
     (
-        <Table striped responsive>
+        <Table striped responsive variant={darkMode ? "dark" : "light"}>
             <thead >
                 <tr className='tableTitle'>
                     <th>{display}</th>
-                    <th>Total Confirmed</th>
-                    <th>Active Cases</th>
+                    <th>Confirmed</th>
+                    <th>Active</th>
                     <th>Recovered</th>
                     <th>Deaths</th>
                 </tr>
@@ -22,21 +22,21 @@ function MainData({ data = [], selection, stateEmpty }) {
                 {data.map((country) => (
                     <tr className='tableBody'>
                         <td>
-                            {selection === 'Worldwide' ? country.Country_Region : (stateEmpty === true ? `No state level data available for ${country.Country_Region}` : country.Province_State)}
+                            {selection === 'Worldwide' ? country.Country_Region : country.Province_State}
                         </td>
                         <td>
-                            {stateEmpty === false ? country.Confirmed.toLocaleString('en-IN') : "No data available"}
+                            {country.Confirmed.toLocaleString('en-US')}
                             {<h6><b>(+{country.NewConfirmed})</b></h6>}
                         </td>
                         <td>
-                            {stateEmpty === false ? country.Active.toLocaleString('en-IN') : "No data available"}
+                            {country.Active.toLocaleString('en-US')}
                         </td>
                         <td>
-                            {stateEmpty === false ? country.Recovered.toLocaleString('en-IN') + "   (" + (parseInt((country.Recovered / country.Confirmed) * 100)) + "%)" : "No data available"}
+                            {country.Recovered.toLocaleString('en-US') + "   (" + (parseInt((country.Recovered / country.Confirmed) * 100)) + "%)"}
                             {<h6><b>(+{country.NewRecovered})</b></h6>}
                         </td>
                         <td>
-                            {stateEmpty === false ? country.Deaths.toLocaleString('en-IN') + "   (" + (parseInt((country.Deaths / country.Confirmed) * 100)) + "%)" : "No data available"}
+                            {country.Deaths.toLocaleString('en-US') + "   (" + (parseInt((country.Deaths / country.Confirmed) * 100)) + "%)"}
                             {<h6><b>(+{country.NewDeaths})</b></h6>}
                         </td>
                     </tr>
@@ -44,7 +44,7 @@ function MainData({ data = [], selection, stateEmpty }) {
             </tbody>
         </Table>
     ):<Card>
-    <Card.Body><h3>State Data not available</h3></Card.Body>
+    <Card.Body className={darkMode ? "dark-mode" : "light-mode"}><h3 >State Data not available</h3></Card.Body>
   </Card>;
 }
 

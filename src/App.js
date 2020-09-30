@@ -3,10 +3,12 @@ import TotalStats from './TotalStats';
 import CountryFilter from './CountryFilter';
 import MainData from './MainData'
 import './App.css';
-import { Container, Row, Col, Image, Spinner } from 'react-bootstrap';
-import logo from './images/virus.png'
+import { Container, Row, Col, Spinner } from 'react-bootstrap';
+import TimeLine from './TimeLine'
 
 function App() {
+
+  
   const [globalData, setGlobalData] = useState({});
   const [countries, setCountries] = useState([]);
   const [countryData, setCountryData] = useState([]);
@@ -14,39 +16,96 @@ function App() {
   const [stateNull, setStateNull] = useState(false)
   const [loading, setLoading] = useState(false);
   const [countryTimeline, setCountryTimeline] = useState([]);
+  const [globalTimeline, setGlobalTimeline] = useState({});
+  const [darkMode, setDarkMode] = useState(getInitialMode);
 
+  // function getInitialStateNull(){
+  //   const stateNullInitial = JSON.parse(localStorage.getItem('state_null'));
+  //   return stateNullInitial || false;
+  // }
+
+  function getInitialMode(){
+    const savedMode = JSON.parse(localStorage.getItem('dark'));
+    return savedMode || false;
+  }
+  // function getGlobalSelection(){
+  //   const savedGlobal = JSON.parse(localStorage.getItem('global'));
+  //   return savedGlobal || 'Worldwide';
+  // }
+
+  // function getCountrySelection(){
+  //   const savedCountry = JSON.parse(localStorage.getItem('country'));
+  //   return savedCountry;
+  // }
   
+  // useEffect(() => {
+  //   localStorage.setItem('state_null',JSON.stringify(stateNull));
+  // },[stateNull])
+
+  useEffect(() => {
+    localStorage.setItem('dark',JSON.stringify(darkMode));
+  },[darkMode])
+
+  // useEffect(() => {
+  //   localStorage.setItem('global',JSON.stringify(globalData));
+  //   localStorage.setItem('country',JSON.stringify(countryData));
+  // },[globalData,countryData])
+
+  // useEffect(() => {
+  //   fetch("https://disease.sh/v3/covid-19/historical/all?lastdays=60")
+  //   .then((response) => response.json())
+  //   .then((data) => {
+  //   setGlobalTimeline(data)
+  //   setLoading(false)
+  //   })
+  // },[])
   useEffect(() => {
     setLoading(true)
     fetch("https://corona.azure-api.net/summary")
     .then((response) => response.json())
     .then((data) => {
       setGlobalData(data.globalData);
+      setCountryData(sortData(data.countries));
+      setCountries(data.countries)
       setLoading(false)
     });
-  },[]);
-
-  useEffect(()=>{
-    setLoading(true)
-    fetch(`https://corona.azure-api.net/summary`)
+    fetch("https://disease.sh/v3/covid-19/historical/all?lastdays=60")
     .then((response) => response.json())
     .then((data) => {
-        setCountryData(sortData(data.countries));
-        setCountries(data.countries)
-        setLoading(false)
-    });
+    setGlobalTimeline(data)
+    setLoading(false)
+    })
   },[]);
-  const onCountryChange = async (e) => {
+  
+  // useEffect(()=>{
+  //   setLoading(true)
+  //   fetch(`https://corona.azure-api.net/summary`)
+  //   .then((response) => response.json())
+  //   .then((data) => {
+  //       setCountryData(sortData(data.countries));
+  //       setCountries(data.countries)
+  //       setLoading(false)
+  //   });
+  // },[]);
+  const onCountryChange = (countryFromFilter) => {
     setLoading(true)
-    const countryCode = e.target.innerHTML.replace(/[()]/g,'');
-    setSelectedName(e.target.innerHTML)
-    if (!(countryCode.localeCompare("Worldwide"))){
+    var countryCode = countryFromFilter;
+    //e.target.innerHTML.replace(/[()]/g,'');
+    setSelectedName(countryCode)  
+    console.log("Selected Name: " + countryCode)
+    if (countryCode === "Worldwide"){
       fetch("https://corona.azure-api.net/summary")
       .then((response) => response.json())
       .then((data) => {
         setGlobalData(data.globalData);
         let newData = sortData(data.countries);
         setCountryData(newData);
+        setLoading(false)
+      })
+      fetch(`https://disease.sh/v3/covid-19/historical/all?lastdays=60`)
+        .then((response) => response.json())
+        .then((data) => {
+        setGlobalTimeline(data)
         setLoading(false)
       })
     }
@@ -64,13 +123,10 @@ function App() {
     .then((response) => response.json())
     .then((data) => {
       setCountryTimeline(data)
+      setLoading(false)
     })
   }
 }
-
-  // useEffect(() => {
-  //   fetch(`https://api-corona.azurewebsites.net/timeline/afghanistan`)
-  // })
 
   const sortData = (casesData) => {
     let sortedData = [...casesData]
@@ -85,30 +141,41 @@ function App() {
   }
 
   return (
-    <div className="App">
+    <div className={darkMode ? 'dark-mode' : 'light-mode'}>
       <Container>
       <header className="App-header">
         <Row>
-          <Col lg={10} sm={9}>
-            <h1>Covid-19 Tracker</h1>
-          </Col>
-          <Col lg={2} md={3} sm={1}>
-            <Image src={logo} alt="" width="170px"/>
+          <Col lg={10} sm={8}>
+            <h1>COVID-19 Tracker</h1>
           </Col>
         </Row>
-      <h6><small>Provides Covid-19 details on a Country-State level</small></h6>
+      <h6><small>Provides COVID-19 details on a Country-State level</small></h6>
       <h6><b>Last updated : {String(globalData.Last_Update).slice(0,10)}</b></h6>
+      <span className="toggle">
+        <input 
+          checked={darkMode}
+          onChange={() => setDarkMode(prevMode => !prevMode)}
+          type="checkbox"
+          className="checkbox"
+          id="checkbox"
+          style={{marginRight:'10px'}}
+        />
+        <label htmlFor="checkbox" />Use Dark Mode
+      </span>
       </header>
       <hr />
       <div>
         <Row>
           <Col>
             <br />
-            <CountryFilter countryDataForDropDown={countries} dataChange={onCountryChange} />
+            <CountryFilter countryDataForDropDown={countries} dataChange={onCountryChange} darkMode={darkMode}/>
           </Col>
         </Row>
         <hr />
         <h1 style={{textAlign:'left'}}>{`${selectedName}`}</h1>
+        {
+         loading ? <Spinner animation='border' style={{position:'relative',top:'50%',left:'50%'}}/> : <TimeLine data={selectedName === "Worldwide" ? globalTimeline : countryTimeline} darkMode={darkMode} selection={selectedName}/>
+        } 
         <br />
          {loading ? <Spinner animation='border' style={{position:'relative',top:'50%',left:'50%'}}/> : <TotalStats 
           totalCases={globalData.Confirmed} 
@@ -119,7 +186,7 @@ function App() {
         />}
       </div>
       <div className = 'mainData'>
-        {loading ? <Spinner animation='border' style={{position:'relative',top:'50%',left:'50%'}}/> : <MainData data={countryData} selection={selectedName} stateEmpty={stateNull} loader={loading}/>}
+        {loading ? <Spinner animation='border' style={{position:'relative',top:'50%',left:'50%'}}/> : <MainData data={countryData} selection={selectedName} stateEmpty={stateNull} loader={loading} darkMode={darkMode}/>}
       </div>
       <br /><br />
       </Container>

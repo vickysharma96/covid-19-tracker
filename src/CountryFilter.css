@@ -1,4 +1,4 @@
-.dropdownMenu{
+.dropDownMenu{
     max-height: 350px;
     overflow-y: scroll;
 }
@@ -8,7 +8,14 @@
 }
 
 .searchCountryInput{
-    border-radius: 10px;
-    border-width: 0.2rem;
     width: 100%;
+    padding-left: 1rem;
+}
+
+DropDown.Item{
+    background-color: black;
+}
+
+input[type=search]::-webkit-search-cancel-button {
+    -webkit-appearance: searchfield-cancel-button;
 }

@@ -11,23 +11,27 @@ function CountryFilter({countryDataForDropDown, dataChange}){
         setSearchName(e.target.value)
     }
 
-    const results = !searchName 
+    var results = !searchName 
         ? countryDataForDropDown 
         : countryDataForDropDown.filter(country => 
             country.Country_Region.toLowerCase().includes(searchName.toLowerCase())
             );
-
+    
+    const dataChange2 = (e) => {
+        dataChange(e.target.innerHTML.replace(/[()]/g,''));
+        setSearchName("")
+    };
 
     return(
         <>
         <DropdownButton value={countryDataForDropDown.Code} className='dropdownButton' id="dropdown-info-button" title={"Select Country"}>
-            <div className='dropdownMenu'>
-                    <input className='searchCountryInput' type="text" placeholder="  Eg: Brazil..." onChange={countryFilterList} value={searchName}/>
+            <div className="dropDownMenu">
+                    <input className='searchCountryInput' type="search"  placeholder="Eg: Brazil..." onChange={countryFilterList} value={searchName}/>
                 <Dropdown.Item onClick={dataChange} value="Worldwide">
                     Worldwide
                 </Dropdown.Item>
                 {results.map((country) =>(
-                    <Dropdown.Item onClick={dataChange} value={country.Code}>{country.Country_Region}</Dropdown.Item>
+                    <Dropdown.Item onClick={dataChange2} value={country.Code}>{country.Country_Region}</Dropdown.Item>
                 ))}
             </div>
         </DropdownButton>
