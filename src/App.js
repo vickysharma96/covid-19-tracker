@@ -173,9 +173,7 @@ function App() {
         </Row>
         <hr />
         <h1 style={{textAlign:'left'}}>{`${selectedName}`}</h1>
-        {
-         loading ? <Spinner animation='border' style={{position:'relative',top:'50%',left:'50%'}}/> : <TimeLine data={selectedName === "Worldwide" ? globalTimeline : countryTimeline} darkMode={darkMode} selection={selectedName}/>
-        } 
+        
         <br />
          {loading ? <Spinner animation='border' style={{position:'relative',top:'50%',left:'50%'}}/> : <TotalStats 
           totalCases={globalData.Confirmed} 
@@ -183,7 +181,12 @@ function App() {
           recoveredCases={globalData.Recovered} 
           deaths={globalData.Deaths}
           loader={loading}
+          darkMode={darkMode}
         />}
+        <br />
+        {
+         loading ? <Spinner animation='border' style={{position:'relative',top:'50%',left:'50%'}}/> : <TimeLine data={selectedName === "Worldwide" ? globalTimeline : countryTimeline} darkMode={darkMode} selection={selectedName}/>
+        } 
       </div>
       <div className = 'mainData'>
         {loading ? <Spinner animation='border' style={{position:'relative',top:'50%',left:'50%'}}/> : <MainData data={countryData} selection={selectedName} stateEmpty={stateNull} loader={loading} darkMode={darkMode}/>}

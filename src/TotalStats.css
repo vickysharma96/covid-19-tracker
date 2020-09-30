@@ -8,3 +8,23 @@
     font-size: 2rem;
     font-weight: bold;
 }
+
+.display{
+    background-color: black;
+}
+
+.container1{
+    background-color: orange;
+}
+
+.container2{
+    background-color: blue;
+}
+
+.container3{
+    background-color: green;
+}
+
+.container4{
+    background-color: red;
+}

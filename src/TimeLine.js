@@ -40,12 +40,11 @@ function TimeLine({data, darkMode, selection}) {
             scales:
             {
                 yAxes: [{
-                    
                     //display:false,
                     ticks: {
                         userCallback: function(value)
                         {
-                            return  (numeral(value).format('0.0 a'));
+                            return  (numeral(value).format('0 a'));
                         },
                     },
                 }],
@@ -53,7 +52,6 @@ function TimeLine({data, darkMode, selection}) {
                     display: false,
                 }]
             },
-            
             tooltips: {
                 callbacks: {
                     label: function(tooltipItems) { 
@@ -98,8 +96,6 @@ function TimeLine({data, darkMode, selection}) {
         //   }
         ]
       }
-
-
     return (
         <div className="trend-chart">
             <h6 style={{textAlign:'center'}}>Trend (Last 60 days)</h6>
